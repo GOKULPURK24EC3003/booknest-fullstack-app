@@ -1,8 +1,40 @@
 // API Service Layer for BookNest Frontend
 class ApiService {
     constructor() {
-        this.baseURL = 'http://localhost:5000/api';
+        // Auto-detect environment and set appropriate API URL
+        this.baseURL = this.getApiBaseUrl();
         this.token = localStorage.getItem('booknest-token');
+    }
+
+    getApiBaseUrl() {
+        // Check if we're in development (localhost)
+        if (window.location.hostname === 'localhost' || 
+            window.location.hostname === '127.0.0.1' ||
+            window.location.hostname === '0.0.0.0') {
+            return 'http://localhost:5000/api';
+        }
+        
+        // Production URLs - Update these after deployment
+        const productionUrls = {
+            // Default production URL (update after backend deployment)
+            default: 'https://booknest-backend.onrender.com/api',
+            // Add your specific backend URL here after deployment
+            // Example: 'https://your-app-name.onrender.com/api'
+        };
+        
+        // You can override by setting a specific URL
+        const customUrl = localStorage.getItem('booknest-api-url');
+        if (customUrl) {
+            return customUrl;
+        }
+        
+        return productionUrls.default;
+    }
+
+    // Method to update API URL (useful after deployment)
+    setApiBaseUrl(url) {
+        this.baseURL = url;
+        localStorage.setItem('booknest-api-url', url);
     }
 
     // Generic request method
