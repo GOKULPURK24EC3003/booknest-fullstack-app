@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Online Bookstore</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-book-open"></i>
+                <span>BookNest</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active" data-page="home">Home</a>
+                <a href="#books" class="nav-link" data-page="books">Books</a>
+                <a href="#wishlist" class="nav-link" data-page="wishlist">Wishlist</a>
+                <a href="#profile" class="nav-link" data-page="profile">Profile</a>
+                <a href="#blog" class="nav-link" data-page="blog">Blog</a>
+                <a href="#authors" class="nav-link" data-page="authors">Authors</a>
+                <a href="#cart" class="nav-link" data-page="cart">Cart</a>
+                <a href="#checkout" class="nav-link" data-page="checkout">Checkout</a>
+                <a href="#login" class="nav-link" data-page="login" id="loginLink">Login</a>
+                <a href="#login" class="nav-link" data-page="login" id="logoutLink" style="display: none;">Logout</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search books...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="wishlist-icon">
+                    <i class="fas fa-heart"></i>
+                    <span class="wishlist-count" id="wishlistCount">0</span>
+                </div>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="dark-mode-toggle">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                </div>
+            </div>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <section id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to BookNest</h1>
+                <p>Discover your next favorite book from our extensive collection</p>
+                <button class="cta-button" onclick="navigateToPage('books')">Explore Books</button>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="categories">
+            <div class="container">
+                <h2>Browse by Category</h2>
+                <div class="category-grid">
+                    <div class="category-card" data-category="fiction">
+                        <i class="fas fa-dragon"></i>
+                        <h3>Fiction</h3>
+                        <p>Immerse yourself in imaginative worlds</p>
+                    </div>
+                    <div class="category-card" data-category="non-fiction">
+                        <i class="fas fa-microscope"></i>
+                        <h3>Non-Fiction</h3>
+                        <p>Explore real stories and facts</p>
+                    </div>
+                    <div class="category-card" data-category="academic">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Academic</h3>
+                        <p>Educational resources and textbooks</p>
+                    </div>
+                    <div class="category-card" data-category="comics">
+                        <i class="fas fa-mask"></i>
+                        <h3>Comics</h3>
+                        <p>Graphic novels and comic books</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Books -->
+        <section class="featured-books">
+            <div class="container">
+                <h2>Featured Books</h2>
+                <div class="books-grid" id="featuredBooksGrid">
+                    <!-- Books will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Books Page -->
+    <section id="books" class="page">
+        <div class="container">
+            <div class="books-header">
+                <h1>All Books</h1>
+                <div class="books-controls">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="fiction">Fiction</option>
+                        <option value="non-fiction">Non-Fiction</option>
+                        <option value="academic">Academic</option>
+                        <option value="comics">Comics</option>
+                    </select>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="title">Sort by Title</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+            <div class="books-grid" id="allBooksGrid">
+                <!-- Books will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Details Page -->
+    <section id="book-details" class="page">
+        <div class="container">
+            <div class="book-details-container">
+                <div class="book-details-image">
+                    <img id="detailBookImage" src="" alt="Book Cover">
+                </div>
+                <div class="book-details-info">
+                    <h1 id="detailBookTitle"></h1>
+                    <p class="book-author" id="detailBookAuthor"></p>
+                    <div class="book-price" id="detailBookPrice"></div>
+                    <p class="book-description" id="detailBookDescription"></p>
+                    <div class="book-actions">
+                        <button class="add-to-cart-btn" id="detailAddToCart">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                        <button class="buy-now-btn">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Page -->
+    <section id="cart" class="page">
+        <div class="container">
+            <h1>Shopping Cart</h1>
+            <div class="cart-container">
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be populated by JavaScript -->
+                </div>
+                <div class="cart-summary">
+                    <h3>Order Summary</h3>
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (10%):</span>
+                        <span id="tax">₹0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">₹0.00</span>
+                    </div>
+                    <button class="checkout-btn" onclick="navigateToPage('checkout')">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Page -->
+    <section id="checkout" class="page">
+        <div class="container">
+            <h1>Checkout</h1>
+            <div class="checkout-container">
+                <div class="checkout-form">
+                    <h3>Billing Information</h3>
+                    <form id="checkoutForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="payment">Payment Method</label>
+                            <select id="payment" required>
+                                <option value="">Select Payment Method</option>
+                                <option value="credit-card">Credit Card</option>
+                                <option value="debit-card">Debit Card</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="cash-on-delivery">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="place-order-btn">Place Order</button>
+                    </form>
+                </div>
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div id="checkoutCartItems">
+                        <!-- Cart items will be populated by JavaScript -->
+                    </div>
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="checkoutSubtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (10%):</span>
+                        <span id="checkoutTax">₹0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="checkoutTotal">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Page -->
+    <section id="login" class="page">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-form">
+                    <div class="login-header">
+                        <i class="fas fa-book-open"></i>
+                        <h2>Welcome to BookNest</h2>
+                        <p>Login to access your account</p>
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="remember">
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="login-btn">Login</button>
+                    </form>
+                    <div class="login-divider">
+                        <span>OR</span>
+                    </div>
+                    <div class="social-login">
+                        <button class="social-btn google-btn">
+                            <i class="fab fa-google"></i> Continue with Google
+                        </button>
+                        <button class="social-btn facebook-btn">
+                            <i class="fab fa-facebook-f"></i> Continue with Facebook
+                        </button>
+                    </div>
+                    <div class="signup-prompt">
+                        <p>Don't have an account? <a href="#" class="signup-link">Sign up</a></p>
+                    </div>
+                </div>
+                <div class="login-info">
+                    <div class="info-content">
+                        <h3>Why Join BookNest?</h3>
+                        <ul class="benefits-list">
+                            <li>
+                                <i class="fas fa-tag"></i>
+                                <span>Exclusive member discounts and offers</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-heart"></i>
+                                <span>Save your favorite books to wishlist</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-truck"></i>
+                                <span>Free shipping on orders over $50</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-history"></i>
+                                <span>View your order history and tracking</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-star"></i>
+                                <span>Write reviews and rate books</span>
+                            </li>
+                        </ul>
+                        <div class="testimonial">
+                            <div class="testimonial-content">
+                                <p>"BookNest has completely transformed my reading experience. The selection is amazing and the prices are unbeatable!"</p>
+                                <div class="testimonial-author">
+                                    <img src="https://picsum.photos/seed/user1/50/50" alt="User">
+                                    <div>
+                                        <strong>Sarah Johnson</strong>
+                                        <span>Verified Member</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishlist Page -->
+    <section id="wishlist" class="page">
+        <div class="container">
+            <h1>My Wishlist</h1>
+            <div class="wishlist-container">
+                <div class="wishlist-items" id="wishlistItems">
+                    <!-- Wishlist items will be populated by JavaScript -->
+                </div>
+                <div class="wishlist-summary">
+                    <h3>Wishlist Summary</h3>
+                    <div class="summary-row">
+                        <span>Total Books:</span>
+                        <span id="wishlistTotal">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Value:</span>
+                        <span id="wishlistValue">$0.00</span>
+                    </div>
+                    <button class="add-all-to-cart-btn">Add All to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Page -->
+    <section id="profile" class="page">
+        <div class="container">
+            <div class="profile-container">
+                <div class="profile-sidebar">
+                    <div class="profile-header">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 id="profileName">User Name</h2>
+                        <p id="profileEmail">user@example.com</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-number" id="totalOrders">0</span>
+                                <span class="stat-label">Orders</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="loyaltyPoints">0</span>
+                                <span class="stat-label">Points</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="memberSince">2024</span>
+                                <span class="stat-label">Member</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-menu">
+                        <button class="menu-btn active" data-section="account">Account Info</button>
+                        <button class="menu-btn" data-section="orders">Order History</button>
+                        <button class="menu-btn" data-section="reading">Reading Progress</button>
+                        <button class="menu-btn" data-section="settings">Settings</button>
+                    </div>
+                </div>
+                <div class="profile-content">
+                    <div class="profile-section active" id="account-section">
+                        <h3>Account Information</h3>
+                        <form id="accountForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" id="firstName" placeholder="Enter first name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" id="lastName" placeholder="Enter last name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="profileEmailInput" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" id="profilePhone" placeholder="Enter phone number">
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <textarea id="profileAddress" placeholder="Enter your address"></textarea>
+                            </div>
+                            <button type="submit" class="save-btn">Save Changes</button>
+                        </form>
+                    </div>
+                    <div class="profile-section" id="orders-section">
+                        <h3>Order History</h3>
+                        <div class="orders-list" id="ordersList">
+                            <!-- Orders will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="profile-section" id="reading-section">
+                        <h3>Reading Progress</h3>
+                        <div class="reading-progress">
+                            <div class="progress-stats">
+                                <div class="progress-card">
+                                    <i class="fas fa-book"></i>
+                                    <h4>Books Read</h4>
+                                    <span id="booksRead">0</span>
+                                </div>
+                                <div class="progress-card">
+                                    <i class="fas fa-clock"></i>
+                                    <h4>Reading Time</h4>
+                                    <span id="readingTime">0h</span>
+                                </div>
+                                <div class="progress-card">
+                                    <i class="fas fa-trophy"></i>
+                                    <h4>Achievements</h4>
+                                    <span id="achievements">0</span>
+                                </div>
+                            </div>
+                            <div class="currently-reading">
+                                <h4>Currently Reading</h4>
+                                <div id="currentlyReadingList">
+                                    <!-- Currently reading books will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-section" id="settings-section">
+                        <h3>Settings</h3>
+                        <div class="settings-options">
+                            <div class="setting-item">
+                                <label>Email Notifications</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label>Newsletter Subscription</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="newsletterSubscription">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label>Reading Reminders</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="readingReminders">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label>Theme</label>
+                                <select id="themeSelect">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="auto">Auto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Page -->
+    <section id="blog" class="page">
+        <div class="container">
+            <h1>BookNest Blog</h1>
+            <div class="blog-container">
+                <div class="blog-sidebar">
+                    <div class="blog-categories">
+                        <h3>Categories</h3>
+                        <ul>
+                            <li><a href="#" data-category="reviews">Book Reviews</a></li>
+                            <li><a href="#" data-category="authors">Author Interviews</a></li>
+                            <li><a href="#" data-category="recommendations">Recommendations</a></li>
+                            <li><a href="#" data-category="news">Book News</a></li>
+                            <li><a href="#" data-category="tips">Reading Tips</a></li>
+                        </ul>
+                    </div>
+                    <div class="newsletter-signup">
+                        <h3>Subscribe to Newsletter</h3>
+                        <form id="newsletterForm">
+                            <input type="email" placeholder="Your email" required>
+                            <button type="submit">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="blog-posts">
+                    <div class="blog-post">
+                        <div class="post-image">
+                            <img src="https://picsum.photos/seed/blog1/400/250" alt="Blog post">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="category">Book Reviews</span>
+                                <span class="date">March 15, 2024</span>
+                            </div>
+                            <h2>The Best Science Fiction Books of 2024</h2>
+                            <p>Discover the most captivating sci-fi novels that are shaping the genre this year...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                    <div class="blog-post">
+                        <div class="post-image">
+                            <img src="https://picsum.photos/seed/blog2/400/250" alt="Blog post">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="category">Author Interviews</span>
+                                <span class="date">March 12, 2024</span>
+                            </div>
+                            <h2>Exclusive Interview with Bestselling Author</h2>
+                            <p>We sit down with the author behind this year's breakout novel to discuss their creative process...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                    <div class="blog-post">
+                        <div class="post-image">
+                            <img src="https://picsum.photos/seed/blog3/400/250" alt="Blog post">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="category">Reading Tips</span>
+                                <span class="date">March 10, 2024</span>
+                            </div>
+                            <h2>How to Read More Books This Year</h2>
+                            <p>Practical tips and strategies to help you increase your reading habit and enjoy more books...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authors Page -->
+    <section id="authors" class="page">
+        <div class="container">
+            <h1>Featured Authors</h1>
+            <div class="authors-grid" id="authorsGrid">
+                <!-- Authors will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Author Details Page -->
+    <section id="author-details" class="page">
+        <div class="container">
+            <div class="author-details-container">
+                <div class="author-header">
+                    <div class="author-image">
+                        <img id="authorProfileImage" src="" alt="Author">
+                    </div>
+                    <div class="author-info">
+                        <h1 id="authorName"></h1>
+                        <p id="authorBio"></p>
+                        <div class="author-stats">
+                            <span><i class="fas fa-book"></i> <span id="authorBookCount">0</span> Books</span>
+                            <span><i class="fas fa-star"></i> <span id="authorRating">0.0</span> Rating</span>
+                            <span><i class="fas fa-users"></i> <span id="authorFollowers">0</span> Followers</span>
+                        </div>
+                        <button class="follow-author-btn" id="followAuthorBtn">Follow Author</button>
+                    </div>
+                </div>
+                <div class="author-books">
+                    <h3>Books by <span id="authorBooksTitle"></span></h3>
+                    <div class="books-grid" id="authorBooksGrid">
+                        <!-- Author books will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Item added to cart!</span>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
