@@ -28,6 +28,25 @@ app.get('/', (req, res) => {
   });
 });
 
+// Seed endpoint to populate database with books
+app.get('/api/seed', async (req, res) => {
+  try {
+    const seedBooks = require('./seed');
+    await seedBooks();
+    res.json({
+      success: true,
+      message: 'Database seeded with books successfully!'
+    });
+  } catch (error) {
+    console.error('Seeding error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error seeding database',
+      error: error.message
+    });
+  }
+});
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/books', require('./routes/books'));
 app.use('/api/cart', require('./routes/cart'));
