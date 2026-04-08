@@ -680,6 +680,7 @@ class WishlistManager {
     removeFromWishlist(bookId) {
         this.wishlist = this.wishlist.filter(item => (item._id || item.id) !== bookId);
         this.saveWishlist();
+        this.updateWishlistUI();
         cartManager.showToast('Book removed from wishlist');
     }
 
@@ -896,6 +897,7 @@ class CartManager {
             // Fallback to localStorage for non-authenticated users
             this.cart = this.cart.filter(item => (item._id || item.id) !== bookId);
             this.saveCart();
+            this.updateCartUI();
             this.showToast('Item removed from cart');
         }
     }
