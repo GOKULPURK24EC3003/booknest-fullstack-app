@@ -742,16 +742,37 @@ class WishlistManager {
                     <div class="wishlist-item-price">₹${item.price.toFixed(2)}</div>
                 </div>
                 <div class="wishlist-item-actions">
-                    <button class="add-wishlist-to-cart" onclick="addToCart(${itemData}); removeFromWishlist('${itemId}')">
+                    <button class="add-wishlist-to-cart">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
-                    <button class="remove-wishlist" onclick="removeFromWishlist('${itemId}')">
+                    <button class="remove-wishlist">
                         <i class="fas fa-trash"></i> Remove
                     </button>
                 </div>
             </div>
         `;
         }).join('');
+
+        // Add event listeners for wishlist buttons
+        wishlistItemsContainer.querySelectorAll('.remove-wishlist').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const wishlistItem = e.target.closest('.wishlist-item');
+                const itemId = wishlistItem.dataset.itemId;
+                console.log('Remove wishlist button clicked for item:', itemId);
+                this.removeFromWishlist(itemId);
+            });
+        });
+
+        wishlistItemsContainer.querySelectorAll('.add-wishlist-to-cart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const wishlistItem = e.target.closest('.wishlist-item');
+                const itemId = wishlistItem.dataset.itemId;
+                const itemData = JSON.parse(wishlistItem.dataset.itemData);
+                console.log('Add to cart clicked for wishlist item:', itemId);
+                cartManager.addToCart(itemData);
+                this.removeFromWishlist(itemId);
+            });
+        });
     }
 
     updateWishlistTotals() {
@@ -986,21 +1007,51 @@ class CartManager {
                 </div>
                 <div class="cart-item-actions">
                     <div class="quantity-controls">
-                        <button class="quantity-btn decrease-qty" data-qty="${item.quantity - 1}" onclick="updateCartQuantity('${itemId}', ${item.quantity - 1})">
+                        <button class="quantity-btn decrease-qty" data-qty="${item.quantity - 1}">
                             <i class="fas fa-minus"></i>
                         </button>
                         <span class="quantity">${item.quantity}</span>
-                        <button class="quantity-btn increase-qty" data-qty="${item.quantity + 1}" onclick="updateCartQuantity('${itemId}', ${item.quantity + 1})">
+                        <button class="quantity-btn increase-qty" data-qty="${item.quantity + 1}">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button class="remove-item" data-action="remove" onclick="removeFromCart('${itemId}')">
+                    <button class="remove-item">
                         <i class="fas fa-trash"></i> Remove
                     </button>
                 </div>
             </div>
         `;
         }).join('');
+
+        // Add event listeners for cart buttons
+        cartItemsContainer.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cartItem = e.target.closest('.cart-item');
+                const itemId = cartItem.dataset.itemId;
+                console.log('Remove button clicked for item:', itemId);
+                this.removeFromCart(itemId);
+            });
+        });
+
+        cartItemsContainer.querySelectorAll('.decrease-qty').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cartItem = e.target.closest('.cart-item');
+                const itemId = cartItem.dataset.itemId;
+                const newQty = parseInt(btn.dataset.qty);
+                console.log('Decrease qty clicked for item:', itemId, 'new qty:', newQty);
+                this.updateQuantity(itemId, newQty);
+            });
+        });
+
+        cartItemsContainer.querySelectorAll('.increase-qty').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cartItem = e.target.closest('.cart-item');
+                const itemId = cartItem.dataset.itemId;
+                const newQty = parseInt(btn.dataset.qty);
+                console.log('Increase qty clicked for item:', itemId, 'new qty:', newQty);
+                this.updateQuantity(itemId, newQty);
+            });
+        });
     }
 
     renderCheckoutItems() {
