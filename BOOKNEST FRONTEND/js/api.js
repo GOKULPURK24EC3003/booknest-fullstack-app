@@ -17,7 +17,7 @@ class ApiService {
         // Production URLs - Update these after deployment
         const productionUrls = {
             // Default production URL (update after backend deployment)
-            default: 'https://booknest-backend-1.onrender.com/api',
+            default: 'https://booknest-fullstack-app.onrender.com/api',
             // Add your specific backend URL here after deployment
             // Example: 'https://your-app-name.onrender.com/api'
         };

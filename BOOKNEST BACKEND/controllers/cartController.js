@@ -1,15 +1,37 @@
 const Cart = require('../models/Cart');
 const Book = require('../models/Book');
+const { isUsingFallback, getFallbackBooks } = require('../config/db');
 
 const addToCart = async (req, res, next) => {
   try {
     const { bookId, quantity } = req.body;
 
-    const book = await Book.findById(bookId);
+    let book;
+    
+    if (isUsingFallback()) {
+      // Find book in fallback data
+      const fallbackBooks = getFallbackBooks();
+      book = fallbackBooks.find(b => b._id === bookId);
+    } else {
+      book = await Book.findById(bookId);
+    }
+
     if (!book) {
       return res.status(404).json({
         success: false,
         message: 'Book not found',
+      });
+    }
+
+    if (isUsingFallback()) {
+      // In fallback mode, just return success (cart is handled in localStorage)
+      return res.status(200).json({
+        success: true,
+        message: 'Book added to cart (fallback mode)',
+        data: {
+          book: book,
+          quantity: quantity
+        }
       });
     }
 
@@ -55,6 +77,14 @@ const addToCart = async (req, res, next) => {
 const removeFromCart = async (req, res, next) => {
   try {
     const { bookId } = req.params;
+
+    if (isUsingFallback()) {
+      // In fallback mode, just return success (cart is handled in localStorage)
+      return res.status(200).json({
+        success: true,
+        message: 'Book removed from cart (fallback mode)'
+      });
+    }
 
     let cart = await Cart.findOne({ user: req.user.id });
 
