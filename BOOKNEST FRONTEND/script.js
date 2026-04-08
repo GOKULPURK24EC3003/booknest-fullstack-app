@@ -1058,23 +1058,53 @@ class CartManager {
 
 // Global wrapper functions for cart operations (to handle async/sync compatibility)
 async function updateCartQuantity(bookId, newQuantity) {
-    await cartManager.updateQuantity(bookId, newQuantity);
+    try {
+        console.log('updateCartQuantity called with:', bookId, newQuantity);
+        await cartManager.updateQuantity(bookId, newQuantity);
+    } catch (error) {
+        console.error('updateCartQuantity error:', error);
+        alert('Failed to update quantity: ' + error.message);
+    }
 }
 
 async function removeFromCart(bookId) {
-    await cartManager.removeFromCart(bookId);
+    try {
+        console.log('removeFromCart called with:', bookId);
+        await cartManager.removeFromCart(bookId);
+    } catch (error) {
+        console.error('removeFromCart error:', error);
+        alert('Failed to remove from cart: ' + error.message);
+    }
 }
 
 async function addToCart(book) {
-    await cartManager.addToCart(book);
+    try {
+        console.log('addToCart called with:', book);
+        await cartManager.addToCart(book);
+    } catch (error) {
+        console.error('addToCart error:', error);
+        alert('Failed to add to cart: ' + error.message);
+    }
 }
 
 async function toggleWishlist(book) {
-    wishlistManager.toggleWishlist(book);
+    try {
+        console.log('toggleWishlist called with:', book);
+        wishlistManager.toggleWishlist(book);
+    } catch (error) {
+        console.error('toggleWishlist error:', error);
+        alert('Failed to toggle wishlist: ' + error.message);
+    }
 }
 
 async function removeFromWishlist(bookId) {
-    wishlistManager.removeFromWishlist(bookId);
+    try {
+        console.log('removeFromWishlist called with:', bookId);
+        wishlistManager.removeFromWishlist(bookId);
+    } catch (error) {
+        console.error('removeFromWishlist error:', error);
+        alert('Failed to remove from wishlist: ' + error.message);
+    }
 }
 
 // Navigation and Page Management
