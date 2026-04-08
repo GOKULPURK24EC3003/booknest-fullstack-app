@@ -6,11 +6,16 @@ const errorHandler = require('./middleware/error');
 
 dotenv.config();
 
+// Connect to MongoDB with better error handling
 connectDB();
 
 const app = express();
 
-app.use(cors());
+// Configure CORS for production
+app.use(cors({
+  origin: ['https://booknest-fullstack-app.vercel.app', 'http://localhost:3000'],
+  credentials: true
+}));
 
 app.use(express.json());
 
@@ -31,20 +36,34 @@ app.get('/', (req, res) => {
 // Seed endpoint to populate database with books
 app.get('/api/seed', async (req, res) => {
   try {
+    console.log('Starting database seeding...');
     const seedBooks = require('./seed');
     await seedBooks();
+    console.log('Database seeded successfully!');
     res.json({
       success: true,
-      message: 'Database seeded with books successfully!'
+      message: 'Database seeded with books successfully!',
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Seeding error:', error);
     res.status(500).json({
       success: false,
       message: 'Error seeding database',
-      error: error.message
+      error: error.message,
+      timestamp: new Date().toISOString()
     });
   }
+});
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'BookNest API is healthy',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 app.use('/api/auth', require('./routes/auth'));
