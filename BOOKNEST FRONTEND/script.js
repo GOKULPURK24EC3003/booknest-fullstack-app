@@ -678,10 +678,12 @@ class WishlistManager {
     }
 
     removeFromWishlist(bookId) {
+        console.log('removeFromWishlist called with:', bookId);
         this.wishlist = this.wishlist.filter(item => (item._id || item.id) !== bookId);
         this.saveWishlist();
         this.updateWishlistUI();
         cartManager.showToast('Book removed from wishlist');
+        console.log('Item removed, wishlist now has:', this.wishlist.length, 'items');
     }
 
     isInWishlist(bookId) {
@@ -730,8 +732,9 @@ class WishlistManager {
 
         wishlistItemsContainer.innerHTML = this.wishlist.map(item => {
             const itemId = item._id || item.id;
+            const itemData = JSON.stringify(item).replace(/"/g, '&quot;');
             return `
-            <div class="wishlist-item">
+            <div class="wishlist-item" data-item-id="${itemId}" data-item-data="${itemData}">
                 <img src="${item.image}" alt="${item.title}" class="wishlist-item-image">
                 <div class="wishlist-item-info">
                     <div class="wishlist-item-title">${item.title}</div>
@@ -739,7 +742,7 @@ class WishlistManager {
                     <div class="wishlist-item-price">₹${item.price.toFixed(2)}</div>
                 </div>
                 <div class="wishlist-item-actions">
-                    <button class="add-wishlist-to-cart" onclick="addToCart(${JSON.stringify(item).replace(/"/g, '&quot;')}); removeFromWishlist('${itemId}')">
+                    <button class="add-wishlist-to-cart" onclick="addToCart(${itemData}); removeFromWishlist('${itemId}')">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                     <button class="remove-wishlist" onclick="removeFromWishlist('${itemId}')">
@@ -974,7 +977,7 @@ class CartManager {
         cartItemsContainer.innerHTML = this.cart.map(item => {
             const itemId = item._id || item.id;
             return `
-            <div class="cart-item">
+            <div class="cart-item" data-item-id="${itemId}">
                 <img src="${item.image}" alt="${item.title}" class="cart-item-image">
                 <div class="cart-item-info">
                     <div class="cart-item-title">${item.title}</div>
@@ -983,15 +986,15 @@ class CartManager {
                 </div>
                 <div class="cart-item-actions">
                     <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="updateCartQuantity('${itemId}', ${item.quantity - 1})">
+                        <button class="quantity-btn decrease-qty" data-qty="${item.quantity - 1}" onclick="updateCartQuantity('${itemId}', ${item.quantity - 1})">
                             <i class="fas fa-minus"></i>
                         </button>
                         <span class="quantity">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="updateCartQuantity('${itemId}', ${item.quantity + 1})">
+                        <button class="quantity-btn increase-qty" data-qty="${item.quantity + 1}" onclick="updateCartQuantity('${itemId}', ${item.quantity + 1})">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button class="remove-item" onclick="removeFromCart('${itemId}')">
+                    <button class="remove-item" data-action="remove" onclick="removeFromCart('${itemId}')">
                         <i class="fas fa-trash"></i> Remove
                     </button>
                 </div>
@@ -1056,55 +1059,30 @@ class CartManager {
     }
 }
 
-// Global wrapper functions for cart operations (to handle async/sync compatibility)
-async function updateCartQuantity(bookId, newQuantity) {
-    try {
-        console.log('updateCartQuantity called with:', bookId, newQuantity);
-        await cartManager.updateQuantity(bookId, newQuantity);
-    } catch (error) {
-        console.error('updateCartQuantity error:', error);
-        alert('Failed to update quantity: ' + error.message);
-    }
+// Global wrapper functions for cart operations (simplified, synchronous)
+function updateCartQuantity(bookId, newQuantity) {
+    console.log('updateCartQuantity called with:', bookId, newQuantity);
+    cartManager.updateQuantity(bookId, newQuantity);
 }
 
-async function removeFromCart(bookId) {
-    try {
-        console.log('removeFromCart called with:', bookId);
-        await cartManager.removeFromCart(bookId);
-    } catch (error) {
-        console.error('removeFromCart error:', error);
-        alert('Failed to remove from cart: ' + error.message);
-    }
+function removeFromCart(bookId) {
+    console.log('removeFromCart called with:', bookId);
+    cartManager.removeFromCart(bookId);
 }
 
-async function addToCart(book) {
-    try {
-        console.log('addToCart called with:', book);
-        await cartManager.addToCart(book);
-    } catch (error) {
-        console.error('addToCart error:', error);
-        alert('Failed to add to cart: ' + error.message);
-    }
+function addToCart(book) {
+    console.log('addToCart called with:', book);
+    cartManager.addToCart(book);
 }
 
-async function toggleWishlist(book) {
-    try {
-        console.log('toggleWishlist called with:', book);
-        wishlistManager.toggleWishlist(book);
-    } catch (error) {
-        console.error('toggleWishlist error:', error);
-        alert('Failed to toggle wishlist: ' + error.message);
-    }
+function toggleWishlist(book) {
+    console.log('toggleWishlist called with:', book);
+    wishlistManager.toggleWishlist(book);
 }
 
-async function removeFromWishlist(bookId) {
-    try {
-        console.log('removeFromWishlist called with:', bookId);
-        wishlistManager.removeFromWishlist(bookId);
-    } catch (error) {
-        console.error('removeFromWishlist error:', error);
-        alert('Failed to remove from wishlist: ' + error.message);
-    }
+function removeFromWishlist(bookId) {
+    console.log('removeFromWishlist called with:', bookId);
+    wishlistManager.removeFromWishlist(bookId);
 }
 
 // Navigation and Page Management
